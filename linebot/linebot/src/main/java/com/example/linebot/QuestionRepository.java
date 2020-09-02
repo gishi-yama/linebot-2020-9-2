@@ -1,5 +1,6 @@
 package com.example.linebot;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -12,6 +13,7 @@ public class QuestionRepository {
 
   private final JdbcTemplate jdbcTemplate;
 
+  @Autowired
   public QuestionRepository(JdbcTemplate jdbcTemplate) {
     this.jdbcTemplate = jdbcTemplate;
   }
