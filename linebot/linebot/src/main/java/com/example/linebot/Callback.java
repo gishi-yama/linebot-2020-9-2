@@ -17,6 +17,7 @@ import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.net.URI;
@@ -32,7 +33,15 @@ import java.util.concurrent.ExecutionException;
         private int n;
         String kaigyou_code_1 = System.lineSeparator();
 
-        // フォローイベントに対応する
+        private final QuestionRepository questionRepository;
+
+    // QuestionRepositoryをDIする
+        @Autowired
+        public Callback(QuestionRepository questionRepository) {
+            this.questionRepository = questionRepository;
+        }
+
+    // フォローイベントに対応する
         @EventMapping
         public TextMessage handleFollow(FollowEvent event) {
             // 実際の開発ではユーザIDを返信せず、フォロワーのユーザIDをデータベースに格納しておくなど
@@ -68,10 +77,10 @@ import java.util.concurrent.ExecutionException;
         // 返答メッセージを作る（教科選択）
         private TextMessage reply(String text) throws Exception{
 
-            Question question = new Question(text);
+//            Question question = new Question(text);
 
             n = new java.util.Random().nextInt(20);
-            List<PreExam> returning = question.selectPreExams(n);
+            List<PreExam> returning = questionRepository.selectPreExams(text, n);
             return new TextMessage(returning.get(n).getMonndai() +kaigyou_code_1
                     + returning.get(n).getSentaku1() +kaigyou_code_1
                     + returning.get(n).getSentaku2() +kaigyou_code_1
@@ -81,8 +90,8 @@ import java.util.concurrent.ExecutionException;
 
         //解答表示
         private TextMessage answer(String text) throws Exception{
-            Question question = new Question(text);
-            List<PreExam> returning = question.selectPreExams(n);
+//            Question question = new Question(text);
+            List<PreExam> returning = questionRepository.selectPreExams(text, n);
             return new TextMessage(returning.get(0).getAnswer() + returning.get(0).getKaisetu());
         }
 
