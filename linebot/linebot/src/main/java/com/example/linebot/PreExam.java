@@ -10,6 +10,10 @@ public class PreExam {
     private int answer;
     private String kaisetu;
 
+    public PreExam() {
+        this(0, "", "", "", "", "", 1, "");
+    }
+
     public PreExam(int questionNumber, String monndai, String sentaku1, String sentaku2, String sentaku3, String sentaku4, int answer, String kaisetu) {
         this.questionNumber = questionNumber;
         this.monndai = monndai;
